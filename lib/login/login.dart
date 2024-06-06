@@ -1,72 +1,91 @@
-import 'package:agendei/register/register.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-class LoginPage extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Digite o seu email'),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Digite a sua senha'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              child: Text('Acessar'),
-              onPressed: () {
-                _login(emailController.text, passwordController.text, context);
-              },
-            ),
-            TextButton(
-              child: Text('Registrar'),
-              onPressed: () {
-                // Adicione a lógica de navegação para a tela de registro
-              },
-            )
-          ],
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: 20.0, left: 60.0, right: 60.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // Logo
+              Image.asset('../icon/logo2.png', height: 50),
+              SizedBox(height: 80), // Espaço entre o logo e o campo de email
+
+              // Campo de Email
+              SizedBox(
+                width: 370, // Largura específica para o campo de email
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Digite o seu email',
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 230, 230, 230),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20), // Espaço entre o campo de email e o campo de senha
+              
+              // Campo de Senha
+              SizedBox(
+                width: 370, // Largura específica para o campo de senha
+                child: TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Digite a sua senha',
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 230, 230, 230),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 40), // Espaço entre o campo de senha e o botão acessar
+
+              // Botão Acessar
+              SizedBox(
+                width: 370, // Largura específica para o botão
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 20.0), // Altura do botão
+                  ),
+                  child: Text('Acessar'),
+                ),
+              ),
+              SizedBox(height: 90), // Espaço entre o botão acessar e o botão registrar
+
+              // Botão Registrar
+              SizedBox(
+                width: 370, // Largura específica para o botão
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                  ),
+                  child: Text('Registrar'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  void _login(String email, String password, BuildContext context) async {
-    var url = 'http://localhost:8080/login';
-    var response = await http.post(Uri.parse(url), body: {
-      'email': email,
-      'password': password,
-    });
-    if (response.statusCode == 200) {
-      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RegisterUser()));
-    } else {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Erro de Login'),
-          content: Text('Email ou senha incorretos!'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-            ),
-          ],
-        ),
-      );
-    }
   }
 }
