@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(
               width: 200,
               height: 300,
-              child: Image.asset('../icon/logo1.png'),
+              child: Image.asset('../img/logo1.png'),
             ),
             SpinKitFadingCircle(
               color: Colors.white,

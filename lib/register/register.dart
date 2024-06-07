@@ -1,3 +1,4 @@
+import 'package:agendei/login/login.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -12,10 +13,10 @@ class RegisterScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               // Logo
-              Image.asset('../icon/logo2.png', height: 50),
+              Image.asset('../img/logo2.png', height: 50),
               SizedBox(height: 80), // Espaço entre o logo e o campo de email
 
-              // Campo de Email
+              // Campo de Nome
               SizedBox(
                 width: 370, // Largura específica para o campo de email
                 child: TextField(
@@ -32,7 +33,7 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 20), // Espaço entre o campo de email e o campo de senha
               
-              // Campo de Senha
+              // Campo de Email
               SizedBox(
                 width: 370, // Largura específica para o campo de senha
                 child: TextField(
@@ -48,9 +49,9 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 40), // Espaço entre o campo de senha e o botão acessar
+              SizedBox(height: 20), // Espaço entre o campo de senha e o botão acessar
 
-              // Campo de Senha
+              // Campo de Telefone
               SizedBox(
                 width: 370, // Largura específica para o campo de senha
                 child: TextField(
@@ -66,7 +67,26 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 40), // Espaço entre o campo de senha e o botão acessar
+              SizedBox(height: 20), // Espaço entre o campo de senha e o botão acessar
+
+              // Campo de Senha
+              SizedBox(
+                width: 370, // Largura específica para o campo de senha
+                child: TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Digite a sua senha',
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 230, 230, 230),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 30), // Espaço entre o campo de senha e o botão acessar
+
               // Botão Acessar
               SizedBox(
                 width: 370, // Largura específica para o botão
@@ -88,7 +108,9 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o botão
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
                     shape: RoundedRectangleBorder(

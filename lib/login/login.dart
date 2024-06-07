@@ -1,3 +1,5 @@
+import 'package:agendei/routes/routes.dart';
+import 'package:agendei/register/register.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -12,7 +14,7 @@ class LoginScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               // Logo
-              Image.asset('../icon/logo2.png', height: 50),
+              Image.asset('../img/logo2.png', height: 50),
               SizedBox(height: 80), // Espaço entre o logo e o campo de email
 
               // Campo de Email
@@ -48,13 +50,15 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 40), // Espaço entre o campo de senha e o botão acessar
+              SizedBox(height: 30), // Espaço entre o campo de senha e o botão acessar
 
               // Botão Acessar
               SizedBox(
                 width: 370, // Largura específica para o botão
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RoutePage()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
                     shape: RoundedRectangleBorder(
@@ -71,7 +75,9 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o botão
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RegisterScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
                     shape: RoundedRectangleBorder(
