@@ -1,5 +1,6 @@
 import 'package:agendei/booking/booking.dart';
 import 'package:agendei/explore/explore.dart';
+import 'package:agendei/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:agendei/home/home.dart';
 
@@ -15,7 +16,7 @@ class _RoutePageState extends State<RoutePage> {
   @override
   void initState() {
     super.initState();
-    _widgetOptions = [HomeScreen(), ExploreScreen(), BookingScreen()];
+    _widgetOptions = [HomeScreen(), ExploreScreen(), BookingScreen(), ProfileScreen()];
   }
 
   void _onItemTapped(int index) {
