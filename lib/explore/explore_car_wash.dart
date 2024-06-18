@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ExploreScreen extends StatefulWidget {
+class ExploreCarWashScreen extends StatefulWidget {
   @override
-  _ExploreScreenState createState() => _ExploreScreenState();
+  _ExploreCarWashScreenState createState() => _ExploreCarWashScreenState();
 }
 
-class _ExploreScreenState extends State<ExploreScreen> {
+class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
   Future<List<Map<String, dynamic>>> fetchClinics() async {
-    final response = await http.get(Uri.parse('http://localhost:8082/clinics'));
+    final response = await http.get(Uri.parse('http://localhost:8081/car-wash'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Map<String, dynamic>> clinics = data.map((clinic) {
         return {
-          'clinicId': clinic['clinicId'],
+          'carWashId': clinic['carWashId'],
           'name': clinic['name'],
           'address': clinic['address'],
           'postalCode': clinic['postalCode'],
           'phoneNumber': clinic['phoneNumber'],
-          'doctor': clinic['doctor'],
+          'serviceManager': clinic['serviceManager'],
           'speciality': clinic['speciality'],
           'price': clinic['price'],
         };
@@ -38,7 +38,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         children: [
           SizedBox(height: 20),
           Text('Explorar', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.teal)),
-          Text('Médico', style: TextStyle(fontSize: 18, color: Colors.grey)),
+          Text('Lavagem de Carro', style: TextStyle(fontSize: 18, color: Colors.grey)),
           Divider(thickness: 1, color: Colors.grey),
           Padding(
             padding: EdgeInsets.all(16.0),
@@ -80,7 +80,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             Text(clinics[index]['address'], style: TextStyle(fontSize: 14)),
                             Text(clinics[index]['postalCode'], style: TextStyle(fontSize: 14)),
                             Text(clinics[index]['phoneNumber'], style: TextStyle(fontSize: 14)),
-                            Text('Doctor: ${clinics[index]['doctor']}', style: TextStyle(fontSize: 14)),
+                            Text('serviceManager: ${clinics[index]['serviceManager']}', style: TextStyle(fontSize: 14)),
                             Text('Speciality: ${clinics[index]['speciality']}', style: TextStyle(fontSize: 14)),
                             Text('Price: ${clinics[index]['price']}', style: TextStyle(fontSize: 14)),
                             Divider(thickness: 1, color: Colors.grey),
@@ -101,6 +101,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
 void main() {
   runApp(MaterialApp(
-    home: ExploreScreen(),
+    home: ExploreCarWashScreen(),
   ));
 }

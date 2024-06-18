@@ -1,16 +1,18 @@
+import 'package:agendei/explore/explore.dart';
+import 'package:agendei/explore/explore_car_wash.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  final List<Map<String, String>> services = [
-    {"name": "Médico", "icon": "../img/medico.png"},
-    {"name": "Dentista", "icon": "../img/dentista.png"},
-    {"name": "Cabeleireiro", "icon": "../img/cabelereiro.png"},
-    {"name": "Personal", "icon": "../img/ginasio.png"},
-    {"name": "Veterinário", "icon": "../img/veterinario.png"},
-    {"name": "Pilates", "icon": "../img/yoga.png"},
-    {"name": "Manicure", "icon": "../img/manicure.png"},
-    {"name": "Nutricionista", "icon": "../img/nutricionista.png"},
-    {"name": "Lava-Rápido", "icon": "../img/oficina.png"}
+  final List<Map<String, dynamic>> services = [
+    {"name": "Médico", "icon": "../img/medico.png", "screen": ExploreScreen()},
+    {"name": "Dentista", "icon": "../img/dentista.png", "screen": null},
+    {"name": "Cabeleireiro", "icon": "../img/cabelereiro.png", "screen": null},
+    {"name": "Personal", "icon": "../img/ginasio.png", "screen": null},
+    {"name": "Veterinário", "icon": "../img/veterinario.png", "screen": null},
+    {"name": "Pilates", "icon": "../img/yoga.png", "screen": null},
+    {"name": "Manicure", "icon": "../img/manicure.png", "screen": null},
+    {"name": "Nutricionista", "icon": "../img/nutricionista.png", "screen": null},
+    {"name": "Lava-Rápido", "icon": "../img/oficina.png", "screen": ExploreCarWashScreen()},
   ];
 
   @override
@@ -63,7 +65,15 @@ class HomeScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    // Handle the tap
+                    if (services[index]["screen"] != null) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => services[index]["screen"],
+                      ));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Página não implementada ainda.')),
+                      );
+                    }
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
