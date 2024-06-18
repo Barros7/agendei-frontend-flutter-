@@ -1,3 +1,4 @@
+import 'package:agendei/booking/booking_car_wash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -70,21 +71,31 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
                   return ListView.builder(
                     itemCount: clinics.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(clinics[index]['name'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            SizedBox(height: 4),
-                            Text(clinics[index]['address'], style: TextStyle(fontSize: 14)),
-                            Text(clinics[index]['postalCode'], style: TextStyle(fontSize: 14)),
-                            Text(clinics[index]['phoneNumber'], style: TextStyle(fontSize: 14)),
-                            Text('serviceManager: ${clinics[index]['serviceManager']}', style: TextStyle(fontSize: 14)),
-                            Text('Speciality: ${clinics[index]['speciality']}', style: TextStyle(fontSize: 14)),
-                            Text('Price: ${clinics[index]['price']}', style: TextStyle(fontSize: 14)),
-                            Divider(thickness: 1, color: Colors.grey),
-                          ],
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookingCarWashScreen(),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(clinics[index]['name'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                              SizedBox(height: 4),
+                              Text(clinics[index]['address'], style: TextStyle(fontSize: 14)),
+                              Text(clinics[index]['postalCode'], style: TextStyle(fontSize: 14)),
+                              Text(clinics[index]['phoneNumber'], style: TextStyle(fontSize: 14)),
+                              Text('serviceManager: ${clinics[index]['serviceManager']}', style: TextStyle(fontSize: 14)),
+                              Text('Speciality: ${clinics[index]['speciality']}', style: TextStyle(fontSize: 14)),
+                              Text('Price: ${clinics[index]['price']}', style: TextStyle(fontSize: 14)),
+                              Divider(thickness: 1, color: Colors.grey),
+                            ],
+                          ),
                         ),
                       );
                     },
