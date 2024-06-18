@@ -1,8 +1,42 @@
 import 'package:agendei/routes/routes.dart';
 import 'package:agendei/register/register.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> loginUser() async {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    final response = await http.post(
+      Uri.parse('http://localhost:8083/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Sucesso
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RoutePage()));
+    } else {
+      // Erro
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao fazer login')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +55,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o campo de email
                 child: TextField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     hintText: 'Digite o seu email',
                     filled: true,
@@ -33,11 +68,12 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20), // Espaço entre o campo de email e o campo de senha
-              
+
               // Campo de Senha
               SizedBox(
                 width: 370, // Largura específica para o campo de senha
                 child: TextField(
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Digite a sua senha',
@@ -56,9 +92,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o botão
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RoutePage()));
-                  },
+                  onPressed: loginUser,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
                     shape: RoundedRectangleBorder(
@@ -94,4 +128,10 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: LoginScreen(),
+  ));
 }
