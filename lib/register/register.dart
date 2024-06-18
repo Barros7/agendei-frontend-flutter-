@@ -1,7 +1,47 @@
 import 'package:agendei/login/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> registerUser() async {
+    final String name = _nameController.text;
+    final String email = _emailController.text;
+    final String phone = _phoneController.text;
+    final String password = _passwordController.text;
+
+    final response = await http.post(
+      Uri.parse('http://localhost:8083/users'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // Sucesso
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
+    } else {
+      // Erro
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao registrar usuário')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +60,7 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o campo de email
                 child: TextField(
+                  controller: _nameController,
                   decoration: InputDecoration(
                     hintText: 'Digite o seu nome',
                     filled: true,
@@ -32,12 +73,12 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20), // Espaço entre o campo de email e o campo de senha
-              
+
               // Campo de Email
               SizedBox(
                 width: 370, // Largura específica para o campo de senha
                 child: TextField(
-                  obscureText: true,
+                  controller: _emailController,
                   decoration: InputDecoration(
                     hintText: 'Digite o seu email',
                     filled: true,
@@ -55,7 +96,7 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o campo de senha
                 child: TextField(
-                  obscureText: true,
+                  controller: _phoneController,
                   decoration: InputDecoration(
                     hintText: 'Digite o seu telefone',
                     filled: true,
@@ -73,6 +114,7 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(
                 width: 370, // Largura específica para o campo de senha
                 child: TextField(
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Digite a sua senha',
@@ -87,11 +129,11 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 30), // Espaço entre o campo de senha e o botão acessar
 
-              // Botão Acessar
+              // Botão Registrar
               SizedBox(
                 width: 370, // Largura específica para o botão
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: registerUser,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 102, 252, 241), // Cor do botão
                     shape: RoundedRectangleBorder(
@@ -99,12 +141,12 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 20.0), // Altura do botão
                   ),
-                  child: Text('Registar'),
+                  child: Text('Registrar'),
                 ),
               ),
               SizedBox(height: 90), // Espaço entre o botão acessar e o botão registrar
 
-              // Botão Registrar
+              // Botão Acessar
               SizedBox(
                 width: 370, // Largura específica para o botão
                 child: ElevatedButton(

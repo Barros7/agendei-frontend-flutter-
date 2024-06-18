@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ExploreScreen extends StatelessWidget {
   final List<Map<String, String>> clinics = [
