@@ -38,19 +38,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final userId = localStorage.getItem('userId');
 
     if (userId != null) {
-      final response = await http.get(Uri.parse('http://localhost:8083/users/$userId'));
+      final response =
+          await http.get(Uri.parse('http://localhost:8083/users/$userId'));
 
       if (response.statusCode == 200) {
         setState(() {
           _userData = json.decode(response.body);
         });
       } else {
-        // Trate o erro aqui
         print('Failed to load user data');
       }
     } else {
-      // Trate o caso em que o userId não está armazenado
-      print('User ID not found in shared preferences');
+      print('User ID not found in localstorage');
     }
   }
 
@@ -58,13 +57,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _selectedIndex = index;
       if (index == 0) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } else if (index == 1) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
       } else if (index == 2) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ReservationScreen()));
       } else {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
       }
     });
   }

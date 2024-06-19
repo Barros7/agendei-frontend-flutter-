@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:localstorage/localstorage.dart';
+
 class ExploreCarWashScreen extends StatefulWidget {
   @override
   _ExploreCarWashScreenState createState() => _ExploreCarWashScreenState();
@@ -15,23 +17,24 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
   int _selectedIndex = 0;
 
   Future<List<Map<String, dynamic>>> fetchClinics() async {
-    final response = await http.get(Uri.parse('http://localhost:8081/car-wash'));
+    final response =
+        await http.get(Uri.parse('http://localhost:8081/car-wash'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-      List<Map<String, dynamic>> clinics = data.map((clinic) {
+      List<Map<String, dynamic>> carWashes = data.map((carWash) {
         return {
-          'carWashId': clinic['carWashId'],
-          'name': clinic['name'],
-          'address': clinic['address'],
-          'postalCode': clinic['postalCode'],
-          'phoneNumber': clinic['phoneNumber'],
-          'serviceManager': clinic['serviceManager'],
-          'speciality': clinic['speciality'],
-          'price': clinic['price'],
+          'carWashId': carWash['carWashId'],
+          'name': carWash['name'],
+          'address': carWash['address'],
+          'postalCode': carWash['postalCode'],
+          'phoneNumber': carWash['phoneNumber'],
+          'serviceManager': carWash['serviceManager'],
+          'speciality': carWash['speciality'],
+          'price': carWash['price'],
         };
       }).toList();
-      return clinics;
+      return carWashes;
     } else {
       throw Exception('Failed to load clinics');
     }
@@ -41,13 +44,17 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
     setState(() {
       _selectedIndex = index;
       if (index == 0) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } else if (index == 1) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
       } else if (index == 2) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ReservationScreen()));
       } else {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
       }
     });
   }
@@ -58,8 +65,13 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Text('Explorar', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.teal)),
-          Text('Lavagem de Carro', style: TextStyle(fontSize: 18, color: Colors.grey)),
+          Text('Explorar',
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal)),
+          Text('Lavagem de Carro',
+              style: TextStyle(fontSize: 18, color: Colors.grey)),
           Divider(thickness: 1, color: Colors.grey),
           Padding(
             padding: EdgeInsets.all(16.0),
@@ -87,12 +99,16 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Center(child: Text('No clinics found'));
                 } else {
-                  List<Map<String, dynamic>> clinics = snapshot.data!;
+                  List<Map<String, dynamic>> carWashes = snapshot.data!;
                   return ListView.builder(
-                    itemCount: clinics.length,
+                    itemCount: carWashes.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
+                          initLocalStorage();
+                          String selectedCarWashId = carWashes[index]['carWashId'];
+                          localStorage.setItem("serviceId", selectedCarWashId);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -101,18 +117,30 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(clinics[index]['name'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                              Text(carWashes[index]['name'],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)),
                               SizedBox(height: 4),
-                              Text(clinics[index]['address'], style: TextStyle(fontSize: 14)),
-                              Text(clinics[index]['postalCode'], style: TextStyle(fontSize: 14)),
-                              Text(clinics[index]['phoneNumber'], style: TextStyle(fontSize: 14)),
-                              Text('serviceManager: ${clinics[index]['serviceManager']}', style: TextStyle(fontSize: 14)),
-                              Text('Speciality: ${clinics[index]['speciality']}', style: TextStyle(fontSize: 14)),
-                              Text('Price: ${clinics[index]['price']}', style: TextStyle(fontSize: 14)),
+                              Text(carWashes[index]['address'],
+                                  style: TextStyle(fontSize: 14)),
+                              Text(carWashes[index]['postalCode'],
+                                  style: TextStyle(fontSize: 14)),
+                              Text(carWashes[index]['phoneNumber'],
+                                  style: TextStyle(fontSize: 14)),
+                              Text(
+                                  'serviceManager: ${carWashes[index]['serviceManager']}',
+                                  style: TextStyle(fontSize: 14)),
+                              Text(
+                                  'Speciality: ${carWashes[index]['speciality']}',
+                                  style: TextStyle(fontSize: 14)),
+                              Text('Price: ${carWashes[index]['price']}',
+                                  style: TextStyle(fontSize: 14)),
                               Divider(thickness: 1, color: Colors.grey),
                             ],
                           ),

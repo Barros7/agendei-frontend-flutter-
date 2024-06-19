@@ -1,11 +1,12 @@
+import 'package:agendei/reservation/reservetion.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-void main() {
-  runApp(MaterialApp(home: BookingMedicalAppointmentScreen()));
-}
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class BookingMedicalAppointmentScreen extends StatefulWidget {
+
   @override
   _BookingMedicalAppointmentScreenState createState() => _BookingMedicalAppointmentScreenState();
 }
@@ -13,6 +14,52 @@ class BookingMedicalAppointmentScreen extends StatefulWidget {
 class _BookingMedicalAppointmentScreenState extends State<BookingMedicalAppointmentScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
+  TimeOfDay? _selectedTime;
+
+  Future<void> _confirmBooking() async {
+    final userId = localStorage.getItem('userId');
+    final clinicId = localStorage.getItem('serviceId');
+
+    final String medicalAppointmentState = "Agendado";
+    final String dateMedicalAppointment = _selectedDay.toIso8601String().split('T')[0];
+    final String hourMedicalAppointment = _selectedTime != null ? _selectedTime!.format(context) : '';
+
+    final response = await http.post(
+      Uri.parse('http://localhost:8082/medical-appointments'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+          "patientId": userId,
+          "clinicId": clinicId,
+          "dateMedicalAppointment": dateMedicalAppointment,
+          "hourMedicalAppointment": hourMedicalAppointment,
+          "medicalAppointmentState": medicalAppointmentState
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Reserva confirmada!')),
+      );
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ReservationScreen()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Falha ao confirmar a reserva.')),
+      );
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +70,6 @@ class _BookingMedicalAppointmentScreenState extends State<BookingMedicalAppointm
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Defina a ação para o botão de retorno
             Navigator.of(context).pop();
           },
         ),
@@ -51,17 +97,10 @@ class _BookingMedicalAppointmentScreenState extends State<BookingMedicalAppointm
             ),
           ),
           Divider(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                TimeChip(label: "9:00", selected: false),
-                TimeChip(label: "9:30", selected: true),
-                TimeChip(label: "10:00", selected: false),
-                TimeChip(label: "10:30", selected: false),
-              ],
-            ),
+          ListTile(
+            title: Text('Hora da reserva: ${_selectedTime?.format(context) ?? 'Selecionar hora'}'),
+            trailing: Icon(Icons.access_time),
+            onTap: () => _selectTime(context),
           ),
           Divider(),
           ListTile(
@@ -76,39 +115,16 @@ class _BookingMedicalAppointmentScreenState extends State<BookingMedicalAppointm
               width: double.infinity,
               child: ElevatedButton(
                 child: Text('Confirmar reserva'),
-                onPressed: () {
-                  // Ação de confirmação
-                },
+                onPressed: _confirmBooking,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                   padding: EdgeInsets.symmetric(vertical: 12.0),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
-    );
-  }
-}
-
-class TimeChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-
-  // Modificador 'required' adicionado
-  TimeChip({required this.label, this.selected = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(label),
-      selected: selected,
-      onSelected: (bool value) {
-        // Defina a ação ao selecionar
-      },
-      backgroundColor: Colors.grey[200],
-      selectedColor: Colors.teal,
     );
   }
 }

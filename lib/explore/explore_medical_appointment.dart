@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:localstorage/localstorage.dart';
+
 class ExploreMedicalAppointmentScreen extends StatefulWidget {
   @override
   _ExploreMedicalAppointmentScreenState createState() => _ExploreMedicalAppointmentScreenState();
@@ -21,7 +23,7 @@ class _ExploreMedicalAppointmentScreenState extends State<ExploreMedicalAppointm
       List<dynamic> data = json.decode(response.body);
       List<Map<String, dynamic>> clinics = data.map((clinic) {
         return {
-          'clinicsId': clinic['clinicsId'],
+          'clinicId': clinic['clinicId'],
           'name': clinic['name'],
           'address': clinic['address'],
           'postalCode': clinic['postalCode'],
@@ -93,6 +95,10 @@ class _ExploreMedicalAppointmentScreenState extends State<ExploreMedicalAppointm
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
+                          initLocalStorage();
+                          String selectedClinicId = clinics[index]['clinicId'];
+                          localStorage.setItem("serviceId", selectedClinicId);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(

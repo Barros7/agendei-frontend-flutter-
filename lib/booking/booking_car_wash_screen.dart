@@ -1,4 +1,6 @@
+import 'package:agendei/reservation/reservetion.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -15,7 +17,9 @@ class _BookingCarWashScreenState extends State<BookingCarWashScreen> {
   TimeOfDay? _selectedTime;
 
   Future<void> _confirmBooking() async {
-    final String userId = "e7572c28-d522-489d-8b0b-7b03fdac1748"; // Id de teste
+    final userId = localStorage.getItem('userId');
+    final carWashId = localStorage.getItem('serviceId');
+
     final String carWashAppointmentState = "Agendado";
     final String dateCarWashAppointment = _selectedDay.toIso8601String().split('T')[0];
     final String hourCarWashAppointment = _selectedTime != null ? _selectedTime!.format(context) : '';
@@ -24,7 +28,7 @@ class _BookingCarWashScreenState extends State<BookingCarWashScreen> {
       Uri.parse('http://localhost:8081/car-wash-appointments'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
-        "carWashId": "e7572c28-d522-468d-8b0b-7b03fdac1637",
+        "carWashId": carWashId,
         "dateCarWashAppointment": dateCarWashAppointment,
         "hourCarWashAppointment": hourCarWashAppointment,
         "carWashAppointmentState": carWashAppointmentState,
@@ -36,6 +40,8 @@ class _BookingCarWashScreenState extends State<BookingCarWashScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Reserva confirmada!')),
       );
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ReservationScreen()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Falha ao confirmar a reserva.')),

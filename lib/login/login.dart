@@ -17,7 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> loginUser() async {
     final String email = _emailController.text;
     final String password = _passwordController.text;
-    await initLocalStorage();
 
     final response = await http.post(
       Uri.parse('http://localhost:8083/'),
@@ -31,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response.statusCode == 200) {
       // Sucesso
       final userId = response.body;
+      await initLocalStorage();
       localStorage.setItem('userId', userId);
       //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RoutePage()));
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
