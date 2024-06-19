@@ -1,8 +1,9 @@
-import 'package:agendei/routes/routes.dart';
+import 'package:agendei/home/home.dart';
 import 'package:agendei/register/register.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:localstorage/localstorage.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> loginUser() async {
     final String email = _emailController.text;
     final String password = _passwordController.text;
+    await initLocalStorage();
 
     final response = await http.post(
       Uri.parse('http://localhost:8083/'),
@@ -28,7 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (response.statusCode == 200) {
       // Sucesso
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RoutePage()));
+      final userId = response.body;
+      localStorage.setItem('userId', userId);
+      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RoutePage()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
     } else {
       // Erro
       ScaffoldMessenger.of(context).showSnackBar(

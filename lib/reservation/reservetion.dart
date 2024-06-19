@@ -1,10 +1,35 @@
+import 'package:agendei/explore/explore_car_wash.dart';
+import 'package:agendei/home/home.dart';
+import 'package:agendei/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(home: ReservationScreen()));
 }
 
-class ReservationScreen extends StatelessWidget {
+class ReservationScreen extends StatefulWidget {
+  @override
+  _ReservationScreenState createState() => _ReservationScreenState();
+}
+
+class _ReservationScreenState extends State<ReservationScreen> {
+  int _selectedIndex = 2;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0) {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else if (index == 1) {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
+      } else if (index == 2) {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
+      } else {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +96,32 @@ class ReservationScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:agendei/booking/booking_car_wash_screen.dart';
+import 'package:agendei/booking/booking_medical_appointment_screen.dart';
 import 'package:agendei/home/home.dart';
 import 'package:agendei/profile/profile.dart';
 import 'package:agendei/reservation/reservetion.dart';
@@ -6,27 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ExploreCarWashScreen extends StatefulWidget {
+class ExploreMedicalAppointmentScreen extends StatefulWidget {
   @override
-  _ExploreCarWashScreenState createState() => _ExploreCarWashScreenState();
+  _ExploreMedicalAppointmentScreenState createState() => _ExploreMedicalAppointmentScreenState();
 }
 
-class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
-  int _selectedIndex = 0;
+class _ExploreMedicalAppointmentScreenState extends State<ExploreMedicalAppointmentScreen> {
+  int _selectedIndex = 1;
 
   Future<List<Map<String, dynamic>>> fetchClinics() async {
-    final response = await http.get(Uri.parse('http://localhost:8081/car-wash'));
+    final response = await http.get(Uri.parse('http://localhost:8082/clinics'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<Map<String, dynamic>> clinics = data.map((clinic) {
         return {
-          'carWashId': clinic['carWashId'],
+          'clinicsId': clinic['clinicsId'],
           'name': clinic['name'],
           'address': clinic['address'],
           'postalCode': clinic['postalCode'],
           'phoneNumber': clinic['phoneNumber'],
-          'serviceManager': clinic['serviceManager'],
+          'doctor': clinic['doctor'],
           'speciality': clinic['speciality'],
           'price': clinic['price'],
         };
@@ -43,7 +43,7 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
       if (index == 0) {
          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } else if (index == 1) {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ExploreMedicalAppointmentScreen()));
       } else if (index == 2) {
          Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
       } else {
@@ -96,7 +96,7 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BookingCarWashScreen(),
+                              builder: (context) => BookingMedicalAppointmentScreen(),
                             ),
                           );
                         },
@@ -110,7 +110,7 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
                               Text(clinics[index]['address'], style: TextStyle(fontSize: 14)),
                               Text(clinics[index]['postalCode'], style: TextStyle(fontSize: 14)),
                               Text(clinics[index]['phoneNumber'], style: TextStyle(fontSize: 14)),
-                              Text('serviceManager: ${clinics[index]['serviceManager']}', style: TextStyle(fontSize: 14)),
+                              Text('doctor: ${clinics[index]['doctor']}', style: TextStyle(fontSize: 14)),
                               Text('Speciality: ${clinics[index]['speciality']}', style: TextStyle(fontSize: 14)),
                               Text('Price: ${clinics[index]['price']}', style: TextStyle(fontSize: 14)),
                               Divider(thickness: 1, color: Colors.grey),
@@ -158,6 +158,6 @@ class _ExploreCarWashScreenState extends State<ExploreCarWashScreen> {
 
 void main() {
   runApp(MaterialApp(
-    home: ExploreCarWashScreen(),
+    home: ExploreMedicalAppointmentScreen(),
   ));
 }

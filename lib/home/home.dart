@@ -1,10 +1,19 @@
-import 'package:agendei/explore/explore.dart';
 import 'package:agendei/explore/explore_car_wash.dart';
+import 'package:agendei/explore/explore_medical_appointment.dart';
+import 'package:agendei/profile/profile.dart';
+import 'package:agendei/reservation/reservetion.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
   final List<Map<String, dynamic>> services = [
-    {"name": "Médico", "icon": "../img/medico.png", "screen": ExploreScreen()},
+    {"name": "Médico", "icon": "../img/medico.png", "screen": ExploreMedicalAppointmentScreen()},
     {"name": "Dentista", "icon": "../img/dentista.png", "screen": null},
     {"name": "Cabeleireiro", "icon": "../img/cabelereiro.png", "screen": null},
     {"name": "Personal", "icon": "../img/ginasio.png", "screen": null},
@@ -14,6 +23,21 @@ class HomeScreen extends StatelessWidget {
     {"name": "Nutricionista", "icon": "../img/nutricionista.png", "screen": null},
     {"name": "Lava-Rápido", "icon": "../img/oficina.png", "screen": ExploreCarWashScreen()},
   ];
+
+ void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (index == 0) {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else if (index == 1) {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ExploreCarWashScreen()));
+      } else if (index == 2) {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationScreen()));
+      } else {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +59,7 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.normal,
-                color: Colors.grey
+                color: Colors.grey,
               ),
               textAlign: TextAlign.left,
             ),
@@ -96,6 +120,32 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        onTap: _onItemTapped,
       ),
     );
   }

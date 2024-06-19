@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
-  runApp(MaterialApp(home: BookingScreen()));
+  runApp(MaterialApp(home: BookingMedicalAppointmentScreen()));
 }
 
-class BookingScreen extends StatefulWidget {
+class BookingMedicalAppointmentScreen extends StatefulWidget {
   @override
-  _BookingScreenState createState() => _BookingScreenState();
+  _BookingMedicalAppointmentScreenState createState() => _BookingMedicalAppointmentScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class _BookingMedicalAppointmentScreenState extends State<BookingMedicalAppointmentScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
